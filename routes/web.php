@@ -3,6 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\VisiteurController;
 use App\Http\Controllers\FraisController;
+use App\Http\Controllers\PraticienController;
+use App\Http\Controllers\RechercheSpeController;
+use App\dao\ServicePraticien;
+use App\dao\ServiceSpecialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,9 +25,20 @@ Route::get('/', function () {
 Route::get('/getLogin', [VisiteurController::class,'getLogin']);
 Route::post('/login', [VisiteurController::class,'signIn']);
 Route::get('/getLogout', [VisiteurController::class,'signOut']);
-Route::get('/getListeFrais',[FraisController::class,'getFraisVisiteurs']);
-Route::get('/modifierFrais/{id_frais}', [FraisController::class, 'updateFrais']);
+Route::get('/getListePraticien',[PraticienController::class,'listerPraticien']);
+Route::get('/ModifierPraticien/{id_praticien}', [PraticienController::class, 'modifier']);
 Route::get('/ajouterFrais', [FraisController::class, 'addFrais']);
 Route::post('/validerFrais', [FraisController::class, 'validateFrais']);
 Route::get('/supprimerFrais/{id_frais}',[FraisController::class, 'supprimerFrais']);
+Route::post('/search', [\App\Http\Controllers\RechercheSpeController::class, 'formListePraticien']);
+Route::post('/SearchResult', [PraticienController::class, 'postSearch']);
+Route::get('/supprimeSpe/{id_prat}/{id_spe}',[RechercheSpeController::class,'suppression']);
+
+
+
+Route::post('/postSearch',
+array(
+    'uses'=> 'App\Http\Controllers\PraticienController@postSearch',
+    'as'=>'postSearch'
+));
 

@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="fr">
 <head>
-    <title>Frais</title>
+    <title>Praticien</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {!! Html::style('assets/css/bootstrap.css') !!}
@@ -34,7 +34,7 @@
             @if (Session::get('id')>0)
             <div class="collapse navbar-collapse" id="navbar-collapse-target">
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ url('/getListeFrais') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Lister</a></li>
+                    <li><a href="{{ url('/getListePraticien') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Lister</a></li>
                     <li><a href="{{ url('/ajouterFrais') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Ajouter</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -43,10 +43,12 @@
             </div>
             @endif
 
+
         </div><!--/.container-fluid -->
     </nav>
 </div>
 <div class="container">
+
     @yield('content')
 </div>
 {!! Html::script('assets/js/bootstrap.min.js') !!}

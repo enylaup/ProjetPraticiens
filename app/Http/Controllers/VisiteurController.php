@@ -8,10 +8,12 @@ use App\MonException;
 
 class VisiteurController extends Controller
 {
-    public function getLogin() {
+    public function getLogin()
+    {
         try {
             $erreur = "";
-            return view ('vues/formLoging');
+
+            return view('vues/formLoging');
         } catch (MonException $e) {
             $monErreur = $e->getMessage();
             return view('vues/error', compact('monErreur'));
@@ -20,7 +22,9 @@ class VisiteurController extends Controller
             return view('vues/error', compact('monErreur'));
         }
     }
-    public function signIn(){
+
+    public function signIn()
+    {
         try {
             $login = Request::input('login');
             $pwd = Request::input('pwd');
@@ -29,24 +33,26 @@ class VisiteurController extends Controller
 
             if ($connected) {
 
-                    return view('home');
-                }
-            else {
+                return view('home');
+            } else {
                 $erreur = "Login ou mot de passe inconnu";
                 return view('vues/formLoging', compact('erreur'));
             }
-        }catch (MonException $e) {
+        } catch (MonException $e) {
             $monErreur = $e->getMessage();
             return view('vues/formLogin', compact('erreur'));
-        }catch (Exception $e) {
-            $monErreur= $e->getMessage();
+        } catch (Exception $e) {
+            $monErreur = $e->getMessage();
             return view('vues/formLogin', compact('erreur'));
         }
     }
-    public function signOut(){
+
+    public function signOut()
+    {
         $unVisiteur = new ServiceVisiteur();
         $unVisiteur->logout();
         return view('home');
     }
+
 
 }
