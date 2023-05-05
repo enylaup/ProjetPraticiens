@@ -13,8 +13,8 @@ class ServicePraticien {
         try {
             $praticien = DB::table('praticien')
                 ->Select()
-                ->join('posseder','praticien.id_praticien','=','posseder.id_praticien')
-                ->join('specialite','posseder.id_specialite','=', 'specialite.id_specialite')
+                ->Join('posseder','praticien.id_praticien','=','posseder.id_praticien')
+                ->Join('specialite','posseder.id_specialite','=', 'specialite.id_specialite')
                 ->get();
             return $praticien;
         } catch (\Illuminate\Database\QueryException $e) {

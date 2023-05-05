@@ -7,12 +7,10 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Input;
-use App\Metier\Employe;
-use App\dao\ServiceEmploye;
 use App\Exceptions\MonException;
 use App\dao\ServicePraticien;
 use App\Http\Controllers\ServiceSpecialite;
-
+use Illuminate\Support\Facades\Session;
 
 
 class PraticienController extends Controller
@@ -87,4 +85,45 @@ class PraticienController extends Controller
         }
     }
 
- }
+
+
+ //ajout
+public function ajout () {
+    if (Session::get('role') == "admin") {
+        try {
+            $unPraticien = new ServicePraticien();
+            $mesPraticiens = $unPraticien->getListePraticien();
+            $unPrat = new ServicePraticien();
+            $mesPraticiens = $unPrat->getListePraticien();
+            return view('vues/formAjout',
+                compact('mesPraticiens', 'mesPraticiens'));
+        } catch (MonException $e) {
+            $erreur = $e->getMessage();
+            return view('error', compact('erreur'));
+        } catch (Exception $ex) {
+            $erreur = $ex->getMessage();
+            return view('error', compact('erreur'));
+        }
+    } else {
+        $erreur = "Vous n'avez pas l'autorisation d'ajouter";
+        return view('error', compact('erreur'));
+    }
+}
+
+public function postAjoutSejour() {
+    try {
+        $id_praticien = Request::input('id_praticien');
+        $nom_praticien = Request::input('nom_praticien');
+        $prenom_praticien = Request::input('prenom_praticien');
+        $uneSpe = new ServiceSpecialite();
+        $uneSpe->ajoutSpe(id_praticien, nom_praticien, prenom_praticien );
+        return view('home');
+    } catch (MonException $e) {
+        $erreur = $e->getMessage();
+        return view('error', compact('erreur'));
+    } catch (Exception $ex) {
+        $erreur = $ex->getMessage();
+        return view('error', compact('erreur'));
+    }
+}
+}
