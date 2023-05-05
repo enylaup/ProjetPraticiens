@@ -33,19 +33,40 @@ class PraticienController extends Controller
      }
 
 
-    public function modifier($id)
+    public function modifier($id_praticien,$id_specialite)
     {
         try {
-            $unPraticienSpe = new SpePraticien();
-            $unPraticien = $unPraticienSpe->getPraticien($id);
+            $unPraticienSpe = new ServicePraticien();
+            $unPraticien = $unPraticienSpe->getUneSpeDunPraticien($id_praticien,$id_specialite);
+            $mesSpePossible=$unPraticienSpe->getSpecialitePossiblePraticien($id_praticien);
         } catch (MonException $e) {
             $monErreur = $e->getMessage();
-            return view('vues/error', compact('monErreur'));
+            return view('vues/pageErreur', compact('monErreur'));
         } catch (\Mockery\Exception $e) {
             $monErreur = $e->getMessage();
-            return view('vues/error', compact('monErreur'));
+            return view('vues/pageErreur', compact('monErreur'));
         }
-        return view('vues/formModifierPraticien', compact('unPraticien'));
+        return view('vues/formModifierPraticien', compact('unPraticien','mesSpePossible'));
+    }
+
+    public function postModifierSpecalite()
+    {
+        try {
+            $unPraticienSpe = new ServicePraticien();
+            $id_praticien=Request::input('id_prat');
+            $old_spe=Request::input('old_spe');
+            $new_spe=Request::input('spe');
+            $unPraticienSpe->updateSpePraticien($id_praticien,$old_spe,$new_spe);
+
+            return view('home');
+
+        } catch (MonException $e) {
+            $monErreur = $e->getMessage();
+            return view('vues/pageErreur', compact('monErreur'));
+        } catch (\Mockery\Exception $e) {
+            $monErreur = $e->getMessage();
+            return view('vues/pageErreur', compact('monErreur'));
+        }
     }
 
     public function postSearch(){

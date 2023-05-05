@@ -38,7 +38,7 @@
                 <td>{{$unPrat->lib_specialite}}</td>
 
                 <td style="text-align: center">
-                    <a href="{{url('/ModifierPraticien')}}/{{$unPrat->id_praticien}}">
+                    <a href="{{url('/modifSpe')}}/{{$unPrat->id_praticien}}/{{$unPrat->id_specialite}}">
                             <span class="glyphicon glyphicon-pencil" data-toggle="tooltip"
                                   data-placement="top" title="Modifier">
 

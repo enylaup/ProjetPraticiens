@@ -35,18 +35,48 @@ class ServicePraticien {
         }
     }
 
-    public function ModificationPraticien($id_praticien, $nom_praticien, $prenom_praticien)
-    {
+    public function getUneSpeDunPraticien ($id_praticien,$id_specialite) {
         try {
-            DB::table('Praticien')
-                ->where('numPrat',$id_praticien)
-                ->update(['id' => $id_praticien, 'nom' => $nom_praticien,
-                    'prenom' => $prenom_praticien ]);
-        }catch (QueryException $e)
-        {
-            throw new MonException($e->getMessage(),5);
+            $monPraticien=DB::table('praticien')
+                ->Select()
+                ->join('posseder','praticien.id_praticien','=','posseder.id_praticien')
+                ->join('specialite','specialite.id_specialite','=','posseder.id_specialite')
+                ->where('praticien.id_praticien','=', $id_praticien)
+                ->where('posseder.id_specialite','=',$id_specialite)
+                ->first();
+            return $monPraticien;
+
+        } catch (QueryException $e) {
+            throw new MonException($e->getMessage(), 5);
         }
     }
+
+    public function getSpecialitePossiblePraticien($id_praticien)
+    {
+        $monPraticien=DB::table('specialite')
+            ->Select()
+            ->whereNotIn('id_specialite',function ($query) use ($id_praticien)
+            {
+                $query->select('id_specialite')->from('posseder')->where('id_praticien','=',$id_praticien);
+            })
+
+            ->get();
+        return $monPraticien;
+    }
+
+    public function updateSpePraticien($id_praticien,$old_specialite,$new_specialite)
+    {
+        try {
+            DB::table('posseder')
+                ->where('posseder.id_praticien','=', $id_praticien)
+                ->where('posseder.id_specialite','=',$old_specialite)
+                ->update(['id_specialite'=>$new_specialite]);
+
+        }catch (QueryException $e) {
+            throw new MonException($e->getMessage(), 5);
+        }
+    }
+
 
     public function supprimeSpe($id_prat,$id_spe)
     {
